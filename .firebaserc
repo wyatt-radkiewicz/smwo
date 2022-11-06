@@ -1,0 +1,7 @@
+{
+  "projects": {
+    "default": "smwo-3b393",
+    "smwo-staging": "smwo-3b393"
+  },
+  "targets": {}
+}

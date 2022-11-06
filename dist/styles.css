@@ -1,0 +1,100 @@
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: url(res/textures/title_bg.jpeg) no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+#game_screen {
+    padding: 0;
+    margin: 0;
+}
+
+#start_button {
+    display:inline-block;
+    padding:0.35em 1.2em;
+    border:0.1em solid #FFF;
+    margin:0 0.3em 0.3em 0;
+    border-radius:0.5em;
+    box-sizing: border-box;
+    text-decoration:none;
+    font-family: 'Koulen', cursive;
+    font-weight:300;
+    font-size:2em;
+    color:#fff;
+    background-color: transparent;
+    text-align:center;
+    transition: ease-out 0.2s;
+    box-shadow: inset 0 0 0 0 #0ae951;
+}
+#start_button:hover{
+    box-shadow: inset 0 100px 0 0 #0ae951;
+}
+
+#loading_screen {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    position: fixed;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 100vh;
+}
+#loading_screen > * {
+    margin: 1rem;
+    width: 400px;
+    height: 100px;
+}
+
+#player_name {
+    display:inline-block;
+    padding:0.35em 1.2em;
+    border:0.1em solid #FFF;
+    caret-color: #FFF;
+    
+    margin:0 0.3em 0.3em 0;
+    border-radius:0.5em;
+    box-sizing: border-box;
+    text-decoration:none;
+    font-family: 'Koulen', cursive;
+    font-weight:300;
+    font-size:2em;
+    color:#fff;
+    background-color: transparent;
+    text-align:center;
+    transition: ease-out 0.2s;
+    box-shadow: inset 0 0 0 0 #0ae951;
+    height: 75px;
+}
+#player_name:hover {
+    box-shadow: inset 0 100px 0 0 #0ae951;
+}
+
+:focus {
+    box-shadow: inset 0 100px 0 0 #0ae951;
+    border-color: #fff;
+    outline: 0px solid transparent;
+}
+#player_name::placeholder{
+    color: #fff;
+}
+
+#name_error.errored {
+    color: rgb(255, 44, 44);
+}
+#name_error {
+    font-family: 'Koulen', cursive;
+    height: 1.5em;
+    color: transparent;
+    transition: all 0.4s ease-out;
+}

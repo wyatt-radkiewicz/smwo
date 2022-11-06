@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Super Mario War Online! (unofficial)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Koulen&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <div id="loading_screen">
+      <p id="name_error"></p>
+      <input id="player_name" placeholder="Player Name"></input>
+      <button id="start_button">SUPER MARIO WAR ONLINE</button>
+    </div>
+    <canvas id="game_screen"></canvas>
+    <assets width="0" height="0" style="visibility: hidden; position: absolute;">
+      <img filter="linear" c="1" r="1" id="tex_title_bg" src="res/textures/title_bg.jpeg">
+      <img filter="nearest" c="1" r="1" id="tex_bg0" src="res/textures/bg0.png">
+      <img filter="nearest" c="1" r="1" id="tex_bg1" src="res/textures/bg1.png">
+      <img filter="nearest" c="1" r="1" id="tex_bg2" src="res/textures/bg2.png">
+      <img filter="nearest" c="1" r="1" id="tex_bg3" src="res/textures/bg3.png">
+      <img filter="nearest" c="1" r="1" id="tex_bg4" src="res/textures/bg4.png">
+      <img filter="nearest" c="1" r="1" id="tex_bg5" src="res/textures/bg5.png">
+      <img filter="nearest" c="1" r="1" id="tex_bg6" src="res/textures/bg6.png">
+      <img filter="nearest" c="1" r="1" id="tex_bombomb" src="res/textures/bombomb.png">
+      <img filter="nearest" c="1" r="1" id="tex_bricks" src="res/textures/bricks.png">
+      <img filter="nearest" c="9" r="1" id="tex_coin" src="res/textures/coin.png">
+      <img filter="nearest" c="2" r="1" id="tex_explosion" src="res/textures/explosion.png">
+      <img filter="nearest" c="1" r="1" id="tex_fireball_impact" src="res/textures/fireball_impact.png">
+      <img filter="nearest" c="1" r="1" id="tex_fireball" src="res/textures/fireball.png">
+      <img filter="nearest" c="16" r="8" id="tex_font" src="res/textures/font.png">
+      <img filter="nearest" c="1" r="1" id="tex_game_over" src="res/textures/game_over.png">
+      <img filter="nearest" c="1" r="1" id="tex_palettes" src="res/textures/palettes.png">
+      <img filter="nearest" c="4" r="2" id="tex_player_big" src="res/textures/player_big.png">
+      <img filter="nearest" c="4" r="2" id="tex_player_chicken" src="res/textures/player_chicken.png">
+      <img filter="nearest" c="4" r="2" id="tex_player_small" src="res/textures/player_small.png">
+      <img filter="nearest" c="1" r="1" id="tex_spring" src="res/textures/spring.png">
+      <img filter="nearest" c="8" r="9" id="tex_terrain" src="res/textures/terrain.png">
+      <img filter="nearest" c="1" r="1" id="tex_title" src="res/textures/title.png">
+      <img filter="linear" c="1" r="1" id="tex_water_normals" src="res/textures/water_normals.jpg">
+      <img filter="linear" c="1" r="1" id="tex_heat_normals" src="res/textures/heat_normals.jpg">
+      <img filter="nearest" c="7" r="1" id="tex_tail" src="res/textures/tail.png">
+      <img filter="nearest" c="1" r="1" id="tex_selector" src="res/textures/selector.png">
+      <img filter="nearest" c="1" r="1" id="tex_pointer" src="res/textures/pointer.png">
+      <img filter="linear" c="1" r="1" id="tex_light" src="res/textures/light.png">
+      <img filter="linear" c="4" r="1" id="tex_light_yellow" src="res/textures/light_yellow.png">
+      <img filter="linear" c="4" r="1" id="tex_light_lava" src="res/textures/light_lava.png">
+      <object id="lvl0" data="res/levels/lvl0.json"></object>
+      <object id="lvl1" data="res/levels/lvl1.json"></object>
+      <object id="lvl2" data="res/levels/lvl2.json"></object>
+      <object id="lvl3" data="res/levels/lvl3.json"></object>
+      <object id="lvl4" data="res/levels/lvl4.json"></object>
+      <object id="lvl5" data="res/levels/lvl5.json"></object>
+      <object id="lvl6" data="res/levels/lvl6.json"></object>
+      <object id="lvl7" data="res/levels/lvl7.json"></object>
+      <object id="lvl8" data="res/levels/lvl8.json"></object>
+      <object id="lvl_tiles" data="res/levels/terrain.json"></object>
+      <audio id="snd_coin" src="res/sounds/coin.wav"></audio>
+      <audio id="snd_cursor" src="res/sounds/cursor.wav"></audio>
+      <audio id="snd_death" src="res/sounds/death.wav"></audio>
+      <audio id="snd_fireball" src="res/sounds/fireball.wav"></audio>
+      <audio id="snd_gameover" src="res/sounds/gameover.wav"></audio>
+      <audio id="snd_hit" src="res/sounds/hit.wav"></audio>
+      <audio id="snd_jump" src="res/sounds/jump.wav"></audio>
+      <audio id="snd_powerdown" src="res/sounds/powerdown.wav"></audio>
+      <audio id="snd_powerup" src="res/sounds/powerup.wav"></audio>
+      <audio id="snd_skid" src="res/sounds/skid.wav"></audio>
+      <audio id="snd_start" src="res/sounds/start.wav"></audio>
+      <audio id="snd_bump" src="res/sounds/bump.wav"></audio>
+      <audio id="snd_pipe" src="res/sounds/pipe.wav"></audio>
+      <audio id="snd_chicken" src="res/sounds/chicken.wav"></audio>
+      <audio id="snd_bomb" src="res/sounds/bomb.wav"></audio>
+      <audio id="snd_pass" src="res/sounds/pass.wav"></audio>
+      <audio id="mus0" src="res/music/mus0.ogg"></audio>
+      <audio id="mus1" src="res/music/mus1.ogg"></audio>
+      <audio id="mus2" src="res/music/mus2.ogg"></audio>
+      <audio id="mus3" src="res/music/mus3.ogg"></audio>
+      <audio id="mus4" src="res/music/mus4.ogg"></audio>
+      <audio id="mus5" src="res/music/mus5.ogg"></audio>
+      <audio id="mus6" src="res/music/mus6.ogg"></audio>
+      <audio id="mus7" src="res/music/mus7.ogg"></audio>
+      <audio id="mus_gameover" src="res/music/gameover.ogg"></audio>
+      <script id="normal_vert" type="x-shader/x-vertex">#version 300 es
+        layout (location = 0) in vec2 aPos;
+        layout (location = 1) in vec2 aTexCoord;
+        layout (location = 2) in vec4 aUvs;
+        layout (location = 3) in mat4 aModel;
+        layout (location = 7) in float aPalette;
+
+        uniform mat4 uProj, uView;
+
+        out vec2 texCoord;
+
+        void main()
+        {
+            vec2 uvs[4] = vec2[4](
+                vec2(aUvs.x, aUvs.y),
+                vec2(aUvs.x+aUvs.z, aUvs.y),
+                vec2(aUvs.x+aUvs.z, aUvs.y+aUvs.w),
+                vec2(aUvs.x, aUvs.y+aUvs.w)
+            );
+            gl_Position = uProj * uView * aModel * vec4(aPos.x, aPos.y, 0.0, 1.0);
+            texCoord = uvs[gl_VertexID];
+        }
+      </script>
+      <script id="normal_frag" type="x-shader/x-fragment">#version 300 es
+        precision mediump float;
+        layout (location = 0) out vec4 FragColor;
+        in vec2 texCoord;
+        uniform sampler2D uTexture;
+        uniform vec4 uColor;
+
+        void main()
+        {
+            vec4 col = texture(uTexture, texCoord);
+            if (col.a <= 1.0/250.0)
+              discard;
+            
+            FragColor = col;
+        } 
+      </script>
+      <script id="paletted_vert" type="x-shader/x-vertex">#version 300 es
+        layout (location = 0) in vec2 aPos;
+        layout (location = 1) in vec2 aTexCoord;
+        layout (location = 2) in vec4 aUvs;
+        layout (location = 3) in mat4 aModel;
+        layout (location = 7) in float aPalette;
+
+        uniform mat4 uProj, uView;
+
+        out vec2 texCoord;
+        out float palette;
+
+        void main()
+        {
+            vec2 uvs[4] = vec2[4](
+                vec2(aUvs.x, aUvs.y),
+                vec2(aUvs.x+aUvs.z, aUvs.y),
+                vec2(aUvs.x+aUvs.z, aUvs.y+aUvs.w),
+                vec2(aUvs.x, aUvs.y+aUvs.w)
+            );
+            gl_Position = uProj * uView * aModel * vec4(aPos.x, aPos.y, 0.0, 1.0);
+            texCoord = uvs[gl_VertexID];
+            palette = aPalette + 0.5;
+        }
+      </script>
+      <script id="paletted_frag" type="x-shader/x-fragment">#version 300 es
+        precision mediump float;
+
+        uniform sampler2D uTexture;
+        uniform sampler2D uPalettes;
+
+        layout (location = 0) out vec4 FragColor;
+
+        in vec2 texCoord;
+        in float palette;
+
+        void main()
+        {
+            vec4 col = texture(uTexture, texCoord);
+            if (col.a <= 1.0/250.0)
+              discard;
+            FragColor = texture(
+              uPalettes,
+              vec2(col.r, palette/18.0)
+            );
+        }
+      </script>
+      <script id="framebuffer_vert" type="x-shader/x-vertex">#version 300 es
+        layout (location = 0) in vec2 aPos;
+        layout (location = 1) in vec2 aTexCoord;
+
+        out vec2 texCoord;
+
+        void main()
+        {
+            gl_Position = vec4(aPos.x*2.0, aPos.y*2.0, 0.0, 1.0);
+            texCoord = vec2(aTexCoord.x, 1.0 - aTexCoord.y);
+        }
+      </script>
+      <script id="framebuffer_normal" type="x-shader/x-fragment">#version 300 es
+        precision mediump float;
+
+        out vec4 FragColor;
+        in vec2 texCoord;
+
+        uniform sampler2D screenTexture;
+
+        void main()
+        {
+          FragColor = texture(screenTexture, texCoord);
+        }
+      </script>
+      <script id="framebuffer_water" type="x-shader/x-fragment">#version 300 es
+        precision mediump float;
+
+        out vec4 FragColor;
+        in vec2 texCoord;
+
+        uniform sampler2D screenTexture, waterNormals;
+        uniform float gfxFrame;
+
+        void main()
+        {
+          vec2 newTexc = vec2(
+            texCoord.x + gfxFrame/400.0,
+            texCoord.y + sin((texCoord.y+gfxFrame/10.0)/50.0) + gfxFrame/600.0
+          );
+          vec2 offset = texture(waterNormals, newTexc).xy;
+          vec2 coord = texCoord+offset*0.015;
+          FragColor = texture(screenTexture, coord)*vec4(0.7, 0.85, 1.0, 1.0);
+        }
+      </script>
+      <script id="framebuffer_dark" type="x-shader/x-fragment">#version 300 es
+        precision mediump float;
+
+        out vec4 FragColor;
+        in vec2 texCoord;
+
+        uniform sampler2D screenTexture, lightTexture;
+
+        void main()
+        {
+          FragColor = vec4(texture(screenTexture, texCoord).rgb*texture(lightTexture, texCoord).rgb, 1.0);
+        }
+      </script>
+      <script id="framebuffer_heat" type="x-shader/x-fragment">#version 300 es
+        precision mediump float;
+
+        out vec4 FragColor;
+        in vec2 texCoord;
+
+        uniform sampler2D screenTexture, heatNormals;
+        uniform float gfxFrame;
+
+        void main()
+        {
+          vec2 newTexc = vec2(
+            texCoord.x,
+            texCoord.y + gfxFrame/2000.0
+          );
+          vec2 offset = texture(heatNormals, newTexc).xy;
+          vec2 coord = texCoord+offset*0.01;
+          FragColor = texture(screenTexture, coord);
+        }
+      </script>
+    </assets>
+  </body>
+</html>
